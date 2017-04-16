@@ -1,7 +1,7 @@
-#ifndef COLA_H
-#define COLA_H
-
+#ifndef LISTA_H
+#define LISTA_H
 #include <stdbool.h>
+#include <stddef.h>
 
 
 /* ******************************************************************
@@ -22,7 +22,7 @@ typedef struct lista_iter lista_iter_t;
 
 // Crea una lista.
 // Post: devuelve una nueva lista vacía.
-lista_t* cola_crear(void);
+lista_t* lista_crear(void);
 
 // Devuelve verdadero o falso, según si la lista tiene elementos.
 // Pre: la lista fue creada.
@@ -71,8 +71,47 @@ void lista_destruir(lista_t* lista, void (*destruir_dato)(void*));
 // Post: se creo el iterador 
 lista_iter_t* lista_iter_crear(lista_t* lista);
 
+// Mueve en 1 posicion al iterador, devuelve false en caso de error 
+// y true en caso que la operacion se realizo de forma correcta
+// Pre: el iterador fue creado
+// Post: el iterador se movio 1 posicion en la lista
+bool lista_iter_avanzar(lista_iter_t *iter);
+
+// Muestra el elemento del nodo en el que el iterador esta posicionado
+// Pre: el iterador fue creado
+void* lista_iter_ver_actual(const lista_iter_t *iter);
+
+// Lleva el iterador hasta el ultimo elemento
+// Pre: el iterador fue creado
+// Post: el iterador esta posicionado sobre el ultimo elemento
+bool lista_iter_al_final(const lista_iter_t *iter);
+// Libera la memoria ocupada por el iterador
+
+// Pre: el iterador fue creado
+// Post: el iterador es destruido
+void lista_iter_destruir(lista_iter_t *iter);
+
+bool lista_iter_insertar(lista_iter_t *iter, void *dato);
+void *lista_iter_borrar(lista_iter_t *iter);
+/* *****************************************************************
+ *                      PRUEBAS UNITARIAS
+ * *****************************************************************/
+
+// Realiza pruebas sobre la implementación del alumno.
+//
+// Las pruebas deben emplazarse en el archivo ‘pruebas_alumno.c’, y
+// solamente pueden emplear la interfaz pública tal y como aparece en cola.h
+// (esto es, las pruebas no pueden acceder a los miembros del struct cola).
+//
+// Para la implementación de las pruebas se debe emplear la función
+// print_test(), como se ha visto en TPs anteriores.
+void pruebas_lista_alumno(void);
 
 
 
+
+
+
+#endif // LISTA_H
 
 

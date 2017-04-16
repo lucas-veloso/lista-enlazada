@@ -1,4 +1,4 @@
-#include "cola.h"
+#include "lista.h"
 #include "testing.h"
 #include <stdio.h>
 
@@ -9,7 +9,7 @@
 int main(void) {
     /* Ejecuta todas las pruebas unitarias. */
     printf("~~~ PRUEBAS ALUMNO ~~~\n");
-    pruebas_cola_alumno();
+    pruebas_lista_alumno();
 
     return failure_count() > 0;
 }
