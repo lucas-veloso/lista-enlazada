@@ -91,8 +91,22 @@ bool lista_iter_al_final(const lista_iter_t *iter);
 // Post: el iterador es destruido
 void lista_iter_destruir(lista_iter_t *iter);
 
+// inserta un elemento en la lista
+// Pre: la lista y el iterador fueron creados
+// Post: la lista tiene un elemento mas
 bool lista_iter_insertar(lista_iter_t *iter, void *dato);
-void *lista_iter_borrar(lista_iter_t *iter);
+
+// borra un elemento de la lista
+// Pre: la lista y el iterador fueron creados
+// Post: la lista tiene un elemento menos
+void* lista_iter_borrar(lista_iter_t *iter);
+
+/* ******************************************************************
+ *                PRIMITIVAS DEL ITERADOR INTERNO
+ * *****************************************************************/
+
+void lista_iterar(lista_t *lista, bool (*visitar)(void *dato, void *extra), void *extra);
+
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
  * *****************************************************************/

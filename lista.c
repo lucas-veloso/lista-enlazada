@@ -18,10 +18,10 @@ struct lista
 void liberar_nodo(lista_t* lista);
 struct nodo* crear_nodo(void* dato,void* extra);
 
-struct lista_iter{ 
-	struct nodo* primer_elemento;
+struct lista_iter{
+	lista_t* lista_iter; 
 	struct nodo* elemento_actual;
-	struct nodo* ultimo_elemento;
+	struct nodo* elemento_anterior;
 };
 
 // Crea una lista.
@@ -132,41 +132,78 @@ void lista_destruir(lista_t* lista, void (*destruir_dato)(void*)){
 lista_iter_t* lista_iter_crear(lista_t* lista){
 	lista_iter_t* iter = malloc(sizeof(lista_iter_t));
 	if(iter==NULL) return NULL;
-	iter->primer_elemento = lista->primer_elemento;
 	iter->elemento_actual = lista->primer_elemento;
-	iter->ultimo_elemento = lista->ultimo_elemento;
+	iter->elemento_anterior = lista->primer_elemento;
+	iter->lista_iter = lista;
 	return iter;
 }
 
 bool lista_iter_avanzar(lista_iter_t *iter){
-	if(iter->elemento_actual->next==NULL) return false;
+	if(iter->elemento_actual==NULL) return false;
+	iter->elemento_anterior = iter->elemento_actual;
 	iter->elemento_actual = iter->elemento_actual->next;
 	return true;
 }
 
 void* lista_iter_ver_actual(const lista_iter_t *iter){
+	if(iter->elemento_actual==NULL) return NULL;
 	return iter->elemento_actual->datos;
 }
 
-// bool lista_iter_al_final(const lista_iter_t *iter){
-// 	iter->elemento_actual = iter->ultimo_elemento;
-// 	return true;
-// }
+bool lista_iter_al_final(const lista_iter_t *iter){
+ 	return iter->elemento_actual==NULL ? true : false;
+ }
 
 void lista_iter_destruir(lista_iter_t *iter){
 	free(iter);
 }
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato){
-	struct nodo* nElemento = crear_nodo(dato,iter->elemento_actual->next);
-	if(nElemento==NULL) return false; 
-	iter->elemento_actual->next = nElemento;
+	if(iter->elemento_actual==iter->lista_iter->primer_elemento)return lista_insertar_primero(iter->lista_iter,dato);
+	if(lista_iter_al_final(iter))return lista_insertar_ultimo(iter->lista_iter,dato);
+	struct nodo* nElemento = crear_nodo(dato,iter->elemento_actual);
+	if(nElemento==NULL) return false;
+	iter->elemento_actual = nElemento;
+	iter->elemento_anterior->next = iter->elemento_actual;
+	iter->lista_iter->tam++;
 	return true;
 }
 
-void *lista_iter_borrar(lista_iter_t *iter){
-
+void* lista_iter_borrar(lista_iter_t *iter){
+	if(iter->elemento_actual==iter->lista_iter->primer_elemento)return lista_borrar_primero(iter->lista_iter);
+	if(iter->elemento_actual->next==NULL){
+		void* dato = iter->elemento_actual->datos;
+		struct nodo* aux = iter->elemento_actual;
+		iter->elemento_actual = NULL;
+		iter->elemento_anterior->next = NULL;
+		iter->lista_iter->tam--;
+		iter->lista_iter->ultimo_elemento = iter->elemento_anterior;
+		free(aux);
+		return dato;
+	}
+	struct nodo* aux = iter->elemento_actual;
+	void* dato = iter->elemento_actual->datos;
+	iter->elemento_actual = iter->elemento_actual->next;
+	iter->elemento_anterior->next = iter->elemento_actual;
+	free(aux);
+	iter->lista_iter->tam--;
+	return dato;
 }
+
+/* ******************************************************************
+ *                       ITERADOR INTERNO
+ * *****************************************************************/
+
+void lista_iterar(lista_t *lista, bool (*visitar)(void *dato, void *extra), void *extra){
+	bool iterar = true;
+	struct nodo* nElemento = malloc(sizeof(struct nodo));
+	if(nElemento == NULL) return;
+	nElemento = lista->primer_elemento;
+	while(iterar && nElemento->next != NULL){
+		iterar = visitar;
+	}
+}
+
 
 /* ******************************************************************
  *                     FUNCIONES AUXILIARES
