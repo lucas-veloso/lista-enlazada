@@ -9,7 +9,12 @@
  *                   PRUEBAS UNITARIAS ALUMNO
  * *****************************************************************/
 
-
+void prueba_lista_vacia(){
+	printf("PRUEBAS LISTA VACIA\n");
+	lista_t* lista = lista_crear();
+	lista_destruir(lista, NULL);
+	print_test("la lista fue destruida",true);
+}
 
 void prueba_crear_lista(){
 	lista_t* lista = lista_crear();	
@@ -103,7 +108,7 @@ void prueba_iterador_externo_iterar(){
 
 void prueba_iterador_externo_agregar_quitar(){
 	lista_t* lista = lista_crear();
-	int dato1 = 1, dato2 = 2, dato3 = 3,dato4 = 4; 
+	int dato1 = 1, dato2 = 2, dato3 = 3,dato4 = 4,dato5 = 5; 
 	lista_insertar_ultimo(lista,&dato1);
 	lista_insertar_ultimo(lista,&dato2);
 	lista_insertar_ultimo(lista,&dato3);
@@ -113,25 +118,45 @@ void prueba_iterador_externo_agregar_quitar(){
 	print_test("el primero elemento es dato1",lista_iter_ver_actual(iter)==&dato1);
 	print_test("agregar un elemento a la lista mediante el iterador",lista_iter_insertar(iter,&dato4));
 	print_test("al agregar un elemento el largo de la lista se incrementa en una unidad",lista_largo(lista) == 4);
-	print_test("el elemento actual es el siguiente",lista_iter_ver_actual(iter)==&dato1);
+	print_test("el elemento actual es el que inserte",lista_iter_ver_actual(iter)==&dato4);
 	print_test("avanzar una posicion devuelve true",lista_iter_avanzar(iter));
-	print_test("el primero elemento es dato2",lista_iter_ver_actual(iter)==&dato2);
+	print_test("el primero elemento es dato1",lista_iter_ver_actual(iter)==&dato1);
+	print_test("ingresar dato5 entre dato1 y dato2",lista_iter_insertar(iter,&dato5));
+	print_test("al quitar un elemento el largo de la lista decrese en una unidad",lista_largo(lista) == 5);
+	print_test("el elemento actual es el que inserte",lista_iter_ver_actual(iter)==&dato5);
 	print_test("avanzar una posicion devuelve true",lista_iter_avanzar(iter));
-	print_test("al avanzar el dato es dato3",lista_iter_ver_actual(iter)==&dato3);
-	print_test("al eliminar dato3 de la lista me devuelve su valor",lista_iter_borrar(iter)==&dato3);
-	print_test("al quitar un elemento el largo de la lista decrese en una unidad",lista_largo(lista) == 3);
-	print_test("al eliminar el ultimo elemento de una lista el elemento actual es un puntero al vector nulo",lista_iter_ver_actual(iter)==NULL);
+	print_test("al avanzar el dato es dato1",lista_iter_ver_actual(iter)==&dato1);
+	print_test("al eliminar dato1 de la lista me devuelve su valor",lista_iter_borrar(iter)==&dato1);
+	print_test("al quitar un elemento el largo de la lista decrese en una unidad",lista_largo(lista) == 4);
+	print_test("al eliminar un elemento el elemento actual es que le seguia",lista_iter_ver_actual(iter)==&dato2);
+	print_test("avanzar una posicion devuelve true",lista_iter_avanzar(iter));
+	print_test("ultimo elemento es dato3",lista_iter_ver_actual(iter)==&dato3);
+	print_test("avanzar una posicion devuelve true",lista_iter_avanzar(iter));
+	print_test("ver el item actual al final del itreador devuelve NULL",lista_iter_ver_actual(iter)==NULL);
+	print_test("avanzar al final del iterador devuelve false",!lista_iter_avanzar(iter));
+	print_test("insertar dato2 al final de la lista",lista_iter_insertar(iter,&dato2));
+	print_test("ver item actual es dato2",lista_iter_ver_actual(iter)==&dato2);
+	print_test("al eliminar dato2 de la lista me devuelve su valor",lista_iter_borrar(iter)==&dato2);
+	// print_test("ver el item actual al final del itreador devuelve NULL",lista_iter_ver_actual(iter)==NULL);
+	// print_test("avanzar al final del iterador devuelve false",!lista_iter_avanzar(iter));
 	lista_destruir(lista,NULL);
 	lista_iter_destruir(iter);
 
 	lista_t* lista1 = lista_crear();
 	lista_iter_t* iter1 = lista_iter_crear(lista1);
 	print_test("insercion en una lista vacia",lista_iter_insertar(iter1,&dato1));
-	print_test("como el iterador esta en el final, ver actual da NULL",lista_iter_ver_actual(iter1)==NULL);
-	print_test("insercion en una lista previamente vacia",lista_iter_insertar(iter1,&dato2));
-	print_test("como el iterador esta en el final, ver actual da NULL",lista_iter_ver_actual(iter1)==NULL);
-	print_test("insercion en una lista previamente vacia",lista_iter_insertar(iter1,&dato3));
-	print_test("como el iterador esta en el final, ver actual da NULL",lista_iter_ver_actual(iter1)==NULL);
+	print_test("iterador parado el dato1",lista_iter_ver_actual(iter1)==&dato1);
+	print_test("primer elemento igual a dato1",lista_ver_primero(lista1) == &dato1);
+	print_test("ultimo elemento igual a dato1",lista_ver_ultimo(lista1) == &dato1);
+	print_test("al quitar un elemento el largo de la lista decrese en una unidad",lista_largo(lista1) == 1);
+	// print_test("al eliminar dato1 de la lista me devuelve su valor",lista_iter_borrar(iter1)==&dato1);
+	// print_test("al quitar un elemento el largo de la lista decrese en una unidad",lista_largo(lista) == 0);
+	// print_test("insercion en una lista previamente vacia",lista_iter_insertar(iter1,&dato2));
+	// print_test("iterador parado en dato2",lista_iter_ver_actual(iter1)==&dato2);
+	// print_test("insercion en una lista previamente vacia",lista_iter_insertar(iter1,&dato3));
+	// print_test("iterador parado en dato3",lista_iter_ver_actual(iter1)==&dato3);
+	// print_test("al eliminar dato3 de la lista me devuelve su valor",lista_iter_borrar(iter)==&dato2);
+	// print_test("al eliminar dato3 de la lista me devuelve su valor",lista_iter_borrar(iter)==&dato1);
 	lista_destruir(lista1,NULL);
 	lista_iter_destruir(iter1);
 }
@@ -139,6 +164,7 @@ void prueba_iterador_externo_agregar_quitar(){
 
 
 void pruebas_lista_alumno() {
+	prueba_lista_vacia();
 	prueba_crear_lista();
 	prueba_volumen_lista();
 	prueba_iterador_externo_vacio();
